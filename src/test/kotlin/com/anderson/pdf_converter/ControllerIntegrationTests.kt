@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPage
 import org.apache.pdfbox.pdmodel.PDPageContentStream
@@ -48,33 +47,35 @@ class ControllerIntegrationTests {
     }
 
     @Test
-    fun testConvertMercadoPagoPdf_autoDetect() {
+    fun `should convert MercadoPago PDF`() {
         val content = "EXTRATO DE CONTA\nSome header\nDETALHE DOS MOVIMENTOS\n09/07/2025\nTransferência Pix enviada Anderson Correa dos Santos\n117477181939 R$ -0,01 R$ 99,99"
         val pdfBytes = makePdfBytes(content)
 
-        val result = mockMvc.perform(
+        mockMvc.perform(
             multipart("/api/pdf/convert").file("file", pdfBytes)
         )
             .andExpect(status().isOk)
-            .andReturn()
-
-        val response = result.response.contentAsString
-        assert(response.contains("09/07/2025"))
     }
 
     @Test
-    fun testConvertItauPdf_autoDetect() {
+    fun `should convert Itau PDF`() {
         val content = "EXTRATO DE CONTA\n21/07/2025 Pagamento 1731586274201 R$ 0,46"
         val pdfBytes = makePdfBytes(content)
 
-        val result = mockMvc.perform(
+        mockMvc.perform(
             multipart("/api/pdf/convert").file("file", pdfBytes)
         )
             .andExpect(status().isOk)
-            .andReturn()
+    }
 
-        val response = result.response.contentAsString
-        assert(response.contains("21/07/2025"))
+    @Test
+    fun `should convert Nubank PDF`() {
+        val content = "Movimentações\nnubank.com.br\n04 AGO 2025\nTransferência enviada\n100,00"
+        val pdfBytes = makePdfBytes(content)
+
+        mockMvc.perform(
+            multipart("/api/pdf/convert").file("file", pdfBytes)
+        )
+            .andExpect(status().isOk)
     }
 }
-

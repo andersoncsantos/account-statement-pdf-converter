@@ -83,16 +83,4 @@ class MercadoPagoParser : PdfStatementParser {
         return transactions
     }
 
-    override fun formatCsv(transactions: List<Transaction>): String {
-        val csv = StringBuilder("Data,Descrição,Valor (R$)\n")
-        for (t in transactions) {
-            csv.append("${t.date},${csvSafe(t.description)},${t.amount}\n")
-        }
-        return csv.toString()
-    }
-
-    private fun csvSafe(s: String): String {
-        val needsQuotes = s.contains(",") || s.contains("\"") || s.contains("\n")
-        return if (needsQuotes) "\"${s.replace("\"", "\"\"")}\"" else s
-    }
 }

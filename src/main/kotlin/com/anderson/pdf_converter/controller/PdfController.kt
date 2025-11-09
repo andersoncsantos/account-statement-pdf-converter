@@ -1,10 +1,8 @@
 package com.anderson.pdf_converter.controller
 
-import com.anderson.pdf_converter.parser.PdfStatementParser
-import com.anderson.pdf_converter.service.ParserDetectorService
+import com.anderson.pdf_converter.service.PdfProcessingService
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile
 @RestController
 @RequestMapping("/api/pdf")
 class PdfController(
-    private val detector: ParserDetectorService
+    private val pdfProcessingService: PdfProcessingService
 ) {
 
     private val logger = LoggerFactory.getLogger(PdfController::class.java)
@@ -25,35 +23,12 @@ class PdfController(
     fun convertPdf(
         @RequestParam("file") file: MultipartFile
     ): ResponseEntity<String> {
-        return try {
-            // Lê todo o arquivo em memória e detecta o parser pela primeira página
-            val bytes = file.inputStream.readAllBytes()
-            val parser: PdfStatementParser? = detector.detect(bytes)
-            if (parser == null) {
-                logger.warn("Parser não detectado para o PDF recebido")
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Não foi possível detectar automaticamente o parser para esse PDF")
-            }
-            logger.info("Parser detectado: ${parser::class.java.simpleName}")
+        val bytes = file.inputStream.readAllBytes()
+        val csv = pdfProcessingService.processPdf(bytes)
 
-            val transactions = parser.parse(bytes.inputStream())
-
-            val csv = parser.formatCsv(transactions)
-
-            ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=extrato.csv")
-                .contentType(MediaType.TEXT_PLAIN)
-                .body(csv)
-        } catch (ex: Exception) {
-            logger.error("Erro ao processar PDF", ex)
-            val message = "Erro ao processar PDF: ${ex.message}"
-            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message)
-        }
-    }
-
-    private fun escapeCsv(s: String?): String {
-        if (s == null) return ""
-        val needsQuotes = s.contains(",") || s.contains("\"") || s.contains("\n")
-        return if (needsQuotes) "\"${s.replace("\"", "\"\"")}\"" else s
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=extrato.csv")
+            .contentType(MediaType.TEXT_PLAIN)
+            .body(csv)
     }
 }

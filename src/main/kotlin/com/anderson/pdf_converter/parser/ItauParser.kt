@@ -41,16 +41,4 @@ class ItauParser : PdfStatementParser {
         return transactions
     }
 
-    override fun formatCsv(transactions: List<Transaction>): String {
-        val sb = StringBuilder("Data,Descrição,Valor (R$)\n")
-        for (t in transactions) {
-            sb.append("${t.date},${csvSafe(t.description)},${t.amount}\n")
-        }
-        return sb.toString()
-    }
-
-    private fun csvSafe(s: String): String {
-        val needsQuotes = s.contains(",") || s.contains("\"") || s.contains("\n")
-        return if (needsQuotes) "\"${s.replace("\"", "\"\"")}\"" else s
-    }
 }

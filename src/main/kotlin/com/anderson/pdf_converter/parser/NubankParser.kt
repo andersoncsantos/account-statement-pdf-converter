@@ -102,18 +102,4 @@ class NubankParser : PdfStatementParser {
         return transactions
     }
 
-    override fun formatCsv(transactions: List<Transaction>): String {
-        val csv = StringBuilder("Data,Descrição,Valor (R$)\n")
-        transactions.forEach { t ->
-            // Normaliza o formato do valor para usar ponto como separador decimal
-            val formattedAmount = t.amount.replace(".", "").replace(",", ".")
-            csv.append("${t.date},${csvSafe(t.description)},${formattedAmount}\n")
-        }
-        return csv.toString()
-    }
-
-    private fun csvSafe(s: String): String {
-        val needsQuotes = s.contains(",") || s.contains("\"") || s.contains("\n")
-        return if (needsQuotes) "\"${s.replace("\"", "\"\"")}\"" else s
-    }
 }
