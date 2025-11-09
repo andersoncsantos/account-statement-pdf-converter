@@ -1,5 +1,6 @@
 package com.anderson.pdf_converter.controller
 
+import com.anderson.pdf_converter.formatter.CsvFormatter
 import com.anderson.pdf_converter.parser.PdfStatementParser
 import com.anderson.pdf_converter.service.ParserDetectorService
 import org.slf4j.LoggerFactory
@@ -16,7 +17,8 @@ import org.springframework.web.multipart.MultipartFile
 @RestController
 @RequestMapping("/api/pdf")
 class PdfController(
-    private val detector: ParserDetectorService
+    private val detector: ParserDetectorService,
+    private val csvFormatter: CsvFormatter
 ) {
 
     private val logger = LoggerFactory.getLogger(PdfController::class.java)
@@ -37,8 +39,7 @@ class PdfController(
             logger.info("Parser detectado: ${parser::class.java.simpleName}")
 
             val transactions = parser.parse(bytes.inputStream())
-
-            val csv = parser.formatCsv(transactions)
+            val csv = csvFormatter.format(transactions)
 
             ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=extrato.csv")
@@ -49,11 +50,5 @@ class PdfController(
             val message = "Erro ao processar PDF: ${ex.message}"
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message)
         }
-    }
-
-    private fun escapeCsv(s: String?): String {
-        if (s == null) return ""
-        val needsQuotes = s.contains(",") || s.contains("\"") || s.contains("\n")
-        return if (needsQuotes) "\"${s.replace("\"", "\"\"")}\"" else s
     }
 }

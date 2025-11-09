@@ -1,9 +1,9 @@
 package com.anderson.pdf_converter.parser
 
 import com.anderson.pdf_converter.model.Transaction
+import com.anderson.pdf_converter.util.MonetaryValueConverter
+import com.anderson.pdf_converter.util.PdfTextExtractor
 import java.io.InputStream
-import org.apache.pdfbox.pdmodel.PDDocument
-import org.apache.pdfbox.text.PDFTextStripper
 import org.springframework.stereotype.Component
 
 @Component
@@ -15,10 +15,7 @@ class ItauParser : PdfStatementParser {
     }
 
     override fun parse(inputStream: InputStream): List<Transaction> {
-        val document = PDDocument.load(inputStream)
-        val stripper = PDFTextStripper()
-        val text = stripper.getText(document)
-        document.close()
+        val text = PdfTextExtractor.extractText(inputStream)
 
         val linhas = text.lines()
             .map { it.trim() }
@@ -28,29 +25,19 @@ class ItauParser : PdfStatementParser {
             .filterNot { it.contains("SALDO ANTERIOR", ignoreCase = true) }
 
         val transactions = mutableListOf<Transaction>()
-        val valorRegex = Regex("""-?\d+[.,]\d{2}""")
+        val valorRegex = Regex("""-?\d{1,3}(?:\.\d{3})*,\d{2}""")
 
         for (linha in linhas) {
             val partes = linha.split(" ").filter { it.isNotBlank() }
             val data = partes.first()
-            val valor = partes.find { valorRegex.matches(it) } ?: ""
-            val lancamento = partes.drop(1).filter { it != valor }.joinToString(" ")
+            val valorRaw = partes.find { valorRegex.matches(it) } ?: ""
+            val valor = MonetaryValueConverter.convertBrazilianFormat(valorRaw)
+            val lancamento = partes.drop(1).filter { it != valorRaw }.joinToString(" ")
             transactions.add(Transaction(data, lancamento, valor))
         }
 
         return transactions
     }
 
-    override fun formatCsv(transactions: List<Transaction>): String {
-        val sb = StringBuilder("Data,Descrição,Valor (R$)\n")
-        for (t in transactions) {
-            sb.append("${t.date},${csvSafe(t.description)},${t.amount}\n")
-        }
-        return sb.toString()
-    }
 
-    private fun csvSafe(s: String): String {
-        val needsQuotes = s.contains(",") || s.contains("\"") || s.contains("\n")
-        return if (needsQuotes) "\"${s.replace("\"", "\"\"")}\"" else s
-    }
 }

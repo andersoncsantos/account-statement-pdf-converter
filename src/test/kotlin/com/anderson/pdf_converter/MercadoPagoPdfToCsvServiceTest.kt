@@ -6,6 +6,7 @@ import com.anderson.pdf_converter.service.PdfStatementService
 import com.anderson.pdf_converter.service.ParserDetectorService
 import com.anderson.pdf_converter.parser.MercadoPagoParser
 import com.anderson.pdf_converter.parser.ItauParser
+import com.anderson.pdf_converter.formatter.TransactionCsvFormatter
 import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
@@ -21,7 +22,8 @@ class MercadoPagoPdfToCsvServiceTest {
         val mercado = MercadoPagoParser()
         val itau = ItauParser()
         val detector = ParserDetectorService(listOf(mercado, itau))
-        val service = PdfStatementService(listOf(mercado, itau), detector)
+        val csvFormatter = TransactionCsvFormatter()
+        val service = PdfStatementService(listOf(mercado, itau), detector, csvFormatter)
 
         FileInputStream(file).use { fis ->
             val csv = service.convertPdfToCsv(fis)
@@ -41,7 +43,8 @@ class MercadoPagoPdfToCsvServiceTest {
         val mercado = MercadoPagoParser()
         val itau = ItauParser()
         val detector = ParserDetectorService(listOf(mercado, itau))
-        val service = PdfStatementService(listOf(mercado, itau), detector)
+        val csvFormatter = TransactionCsvFormatter()
+        val service = PdfStatementService(listOf(mercado, itau), detector, csvFormatter)
 
         FileInputStream(file).use { fis ->
             val csv = service.convertPdfToCsv(fis)

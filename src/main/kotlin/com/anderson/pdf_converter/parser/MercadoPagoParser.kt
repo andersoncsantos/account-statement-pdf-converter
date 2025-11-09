@@ -1,9 +1,9 @@
 package com.anderson.pdf_converter.parser
 
 import com.anderson.pdf_converter.model.Transaction
+import com.anderson.pdf_converter.util.MonetaryValueConverter
+import com.anderson.pdf_converter.util.PdfTextExtractor
 import java.io.InputStream
-import org.apache.pdfbox.pdmodel.PDDocument
-import org.apache.pdfbox.text.PDFTextStripper
 import org.springframework.stereotype.Component
 
 @Component
@@ -14,15 +14,7 @@ class MercadoPagoParser : PdfStatementParser {
     }
 
     override fun parse(inputStream: InputStream): List<Transaction> {
-        val document = PDDocument.load(inputStream)
-        val stripper = PDFTextStripper()
-        val totalPages = document.numberOfPages
-
-        // Extrai todo o texto
-        stripper.startPage = 1
-        stripper.endPage = totalPages
-        val text = stripper.getText(document)
-        document.close()
+        val text = PdfTextExtractor.extractText(inputStream)
 
         // Localiza seção
         val detailStart = text.indexOf("DETALHE DOS MOVIMENTOS")
@@ -54,7 +46,7 @@ class MercadoPagoParser : PdfStatementParser {
 
                 val idMatch = idValuePattern.find(content, searchStart)
                 if (idMatch != null && idMatch.range.first < nextDateStart) {
-                    val valor = idMatch.groupValues[2].replace(".", "").replace(",", ".")
+                    val valor = MonetaryValueConverter.convertBrazilianFormat(idMatch.groupValues[2])
                     val descricaoRaw = content.substring(searchStart, idMatch.range.first)
                     val descricao = descricaoRaw.replace(Regex("\\s+"), " ").trim()
                     transactions.add(Transaction(data, descricao, valor))
@@ -71,7 +63,7 @@ class MercadoPagoParser : PdfStatementParser {
                         }
                     }
                     if (match != null) {
-                        val valor = match.groupValues[2].replace(".", "").replace(",", ".")
+                        val valor = MonetaryValueConverter.convertBrazilianFormat(match.groupValues[2])
                         val descricaoRaw = segment.substring(0, match.range.first)
                         val descricao = descricaoRaw.replace(Regex("\\s+"), " ").trim()
                         transactions.add(Transaction(data, descricao, valor))
@@ -83,16 +75,5 @@ class MercadoPagoParser : PdfStatementParser {
         return transactions
     }
 
-    override fun formatCsv(transactions: List<Transaction>): String {
-        val csv = StringBuilder("Data,Descrição,Valor (R$)\n")
-        for (t in transactions) {
-            csv.append("${t.date},${csvSafe(t.description)},${t.amount}\n")
-        }
-        return csv.toString()
-    }
 
-    private fun csvSafe(s: String): String {
-        val needsQuotes = s.contains(",") || s.contains("\"") || s.contains("\n")
-        return if (needsQuotes) "\"${s.replace("\"", "\"\"")}\"" else s
-    }
 }

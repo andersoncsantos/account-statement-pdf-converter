@@ -1,8 +1,7 @@
 package com.anderson.pdf_converter.service
 
 import com.anderson.pdf_converter.parser.PdfStatementParser
-import org.apache.pdfbox.pdmodel.PDDocument
-import org.apache.pdfbox.text.PDFTextStripper
+import com.anderson.pdf_converter.util.PdfTextExtractor
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.ByteArrayInputStream
@@ -63,11 +62,6 @@ class ParserDetectorService(
     }
 
     private fun extractFullText(bytes: ByteArray): String {
-        PDDocument.load(ByteArrayInputStream(bytes)).use { document ->
-            val stripper = PDFTextStripper()
-            stripper.startPage = 1
-            stripper.endPage = document.numberOfPages
-            return stripper.getText(document)
-        }
+        return PdfTextExtractor.extractText(ByteArrayInputStream(bytes))
     }
 }

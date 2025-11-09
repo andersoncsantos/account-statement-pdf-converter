@@ -1,13 +1,11 @@
 package com.anderson.pdf_converter.parser
 
 import com.anderson.pdf_converter.model.Transaction
+import com.anderson.pdf_converter.util.MonetaryValueConverter
 import java.io.InputStream
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.text.PDFTextStripper
 import org.springframework.stereotype.Component
-
-// Definição da classe de dados para clareza (assumindo que já existe no seu projeto)
-// data class Transaction(val date: String, val description: String, val amount: String)
 
 @Component
 class NubankParser : PdfStatementParser {
@@ -56,7 +54,7 @@ class NubankParser : PdfStatementParser {
                 // CASO A: Transação de linha única (descrição e valor na mesma linha)
                 val valueMatch = valueAtEndRegex.find(line)
                 if (valueMatch != null) {
-                    val value = valueMatch.groupValues[1]
+                    val value = MonetaryValueConverter.convertBrazilianFormat(valueMatch.groupValues[1])
                     val description = line.take(valueMatch.range.first).trim()
                     transactions.add(Transaction(currentDate, description, value))
                     i++ // Avança para a próxima linha
@@ -78,7 +76,8 @@ class NubankParser : PdfStatementParser {
                     // Condição de sucesso: encontrou a linha que contém apenas o valor
                     if (valueOnOwnLineRegex.matches(nextLine)) {
                         val description = descriptionParts.joinToString(" ")
-                        transactions.add(Transaction(currentDate, description, nextLine))
+                        val value = MonetaryValueConverter.convertBrazilianFormat(nextLine)
+                        transactions.add(Transaction(currentDate, description, value))
 
                         i = j + 1 // Atualiza o contador principal para depois da transação
                         transactionFound = true
@@ -102,18 +101,5 @@ class NubankParser : PdfStatementParser {
         return transactions
     }
 
-    override fun formatCsv(transactions: List<Transaction>): String {
-        val csv = StringBuilder("Data,Descrição,Valor (R$)\n")
-        transactions.forEach { t ->
-            // Normaliza o formato do valor para usar ponto como separador decimal
-            val formattedAmount = t.amount.replace(".", "").replace(",", ".")
-            csv.append("${t.date},${csvSafe(t.description)},${formattedAmount}\n")
-        }
-        return csv.toString()
-    }
 
-    private fun csvSafe(s: String): String {
-        val needsQuotes = s.contains(",") || s.contains("\"") || s.contains("\n")
-        return if (needsQuotes) "\"${s.replace("\"", "\"\"")}\"" else s
-    }
 }
