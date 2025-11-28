@@ -21,8 +21,10 @@ class ItauParser : PdfStatementParser {
             .map { it.trim() }
             .filter { it.isNotBlank() }
             .filter { Regex("""\d{2}/\d{2}/\d{4}""").containsMatchIn(it) }
-            .filterNot { it.contains("SALDO TOTAL", ignoreCase = true) }
             .filterNot { it.contains("SALDO ANTERIOR", ignoreCase = true) }
+            .filterNot { it.contains("SALDO DO DIA", ignoreCase = true) }
+            .filterNot { it.contains("SALDO TOTAL", ignoreCase = true) }
+
 
         val transactions = mutableListOf<Transaction>()
         val valorRegex = Regex("""-?\d{1,3}(?:\.\d{3})*,\d{2}""")
