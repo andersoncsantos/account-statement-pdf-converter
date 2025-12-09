@@ -19,7 +19,6 @@ services:
       - zookeeper
     ports:
       - "9092:9092"
-      - "29092:29092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -29,6 +28,12 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
     networks:
       - kafka-network
 
@@ -36,8 +41,8 @@ services:
     image: confluentinc/cp-schema-registry:7.5.0
     container_name: schema-registry
     depends_on:
-      - zookeeper
-      - kafka
+      kafka:
+        condition: service_healthy
     ports:
       - "8081:8081"
     environment:
@@ -45,12 +50,14 @@ services:
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:29092
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
       SCHEMA_REGISTRY_KAFKASTORE_TOPIC: _schemas
+      SCHEMA_REGISTRY_DEBUG: "true"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/subjects"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 40s
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+    restart: unless-stopped
     networks:
       - kafka-network
 
