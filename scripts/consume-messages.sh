@@ -10,10 +10,10 @@ echo "Reading from beginning of topic..."
 echo "Press Ctrl+C to stop"
 echo "----------------------------------------"
 
-docker exec -i kafka kafka-console-consumer \
+docker exec kafka kafka-console-consumer \
   --topic "$TOPIC_NAME" \
   --from-beginning \
-  --bootstrap-server localhost:9092
+  --bootstrap-server kafka:9092
 
 if [ $? -ne 0 ]; then
   echo "✗ Failed to consume messages from topic '$TOPIC_NAME'"

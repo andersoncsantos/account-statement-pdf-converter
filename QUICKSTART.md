@@ -22,7 +22,7 @@ bash scripts/setup-permissions.sh
 ## Step 2: Start Kafka
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 Wait about 30 seconds for Kafka to fully start.
@@ -95,7 +95,7 @@ Press `Ctrl+C` to stop consuming.
 ## Stopping Kafka
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ## Troubleshooting
@@ -124,7 +124,7 @@ docker ps
 docker logs kafka
 
 # Restart Kafka
-docker-compose restart kafka
+docker compose restart kafka
 ```
 
 ### Scripts Not Executable

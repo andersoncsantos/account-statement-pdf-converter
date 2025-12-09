@@ -1,0 +1,29 @@
+{
+  "type": "record",
+  "name": "TransactionAvro",
+  "namespace": "com.anderson.pdf_converter.avro",
+  "doc": "Represents a financial transaction extracted from a PDF statement",
+  "fields": [
+    {
+      "name": "date",
+      "type": "string",
+      "doc": "Transaction date in ISO-8601 format (YYYY-MM-DD)"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "doc": "Transaction description or merchant name"
+    },
+    {
+      "name": "amount",
+      "type": "string",
+      "doc": "Transaction amount as a string to preserve formatting"
+    },
+    {
+      "name": "balance",
+      "type": ["null", "string"],
+      "default": null,
+      "doc": "Account balance after transaction (optional)"
+    }
+  ]
+}

@@ -23,7 +23,7 @@ Before you begin, ensure you have the following installed:
 From the project root directory, run:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 This command starts both Zookeeper and Kafka broker in detached mode.
@@ -100,7 +100,7 @@ chmod +x scripts/consume-messages.sh
 Read messages from the topic:
 
 ```bash
-./scripts/consume-messages.sh
+  ./scripts/consume-messages.sh
 ```
 
 **Consume from a specific topic:**
@@ -202,7 +202,7 @@ class KafkaMessageConsumer {
 ```
 
 To use it:
-1. Ensure Kafka is running (`docker-compose up -d`)
+1. Ensure Kafka is running (`docker compose up -d`)
 2. Start your Spring Boot application
 3. Publish messages using the producer script
 4. Watch the application logs to see consumed messages
@@ -215,7 +215,7 @@ To use it:
 
 **Solution**: 
 - Check if another process is using the port: `lsof -i :9092` or `netstat -an | grep 9092`
-- Stop the conflicting service or modify the port in `docker-compose.yml`
+- Stop the conflicting service or modify the port in `docker compose.yml`
 
 ### Docker Not Running
 
@@ -233,7 +233,7 @@ To use it:
 - Wait 30-60 seconds after starting containers
 - Check container status: `docker ps`
 - View logs: `docker logs kafka`
-- Restart if needed: `docker-compose restart kafka`
+- Restart if needed: `docker compose restart kafka`
 
 ### Insufficient Memory
 
@@ -266,19 +266,19 @@ To use it:
 To stop and remove all containers:
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 To stop containers but keep data:
 
 ```bash
-docker-compose stop
+docker compose stop
 ```
 
 To restart:
 
 ```bash
-docker-compose start
+docker compose start
 ```
 
 ## Advanced Usage
