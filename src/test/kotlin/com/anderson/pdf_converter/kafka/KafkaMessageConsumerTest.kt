@@ -1,17 +1,19 @@
 package com.anderson.pdf_converter.kafka
 
-import com.anderson.pdf_converter.avro.TransactionAvro
-import io.mockk.*
-import org.apache.kafka.common.errors.SerializationException
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.read.ListAppender
-import org.slf4j.LoggerFactory
-import org.junit.jupiter.api.Assertions.*
+import com.anderson.pdf_converter.avro.TransactionAvro
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.spyk
+import org.apache.kafka.common.errors.SerializationException
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.slf4j.LoggerFactory
 
 /**
  * Unit tests for KafkaMessageConsumer using MockK.
