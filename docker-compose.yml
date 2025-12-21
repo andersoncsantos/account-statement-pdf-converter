@@ -61,6 +61,31 @@ services:
     networks:
       - kafka-network
 
+  vault:
+    image: hashicorp/vault:latest
+    container_name: vault-dev
+    ports:
+      - "8200:8200"
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: "dev-root-token"
+      VAULT_DEV_LISTEN_ADDRESS: "0.0.0.0:8200"
+    cap_add:
+      - IPC_LOCK
+    command: server -dev
+
+  valkey:
+    image: valkey/valkey:7.2-alpine
+    container_name: valkey
+    ports:
+      - "6379:6379"
+    command: valkey-server --appendonly yes
+    volumes:
+      - valkey-data:/data
+    restart: unless-stopped
+
+volumes:
+  valkey-data:
+
 networks:
   kafka-network:
     driver: bridge

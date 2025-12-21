@@ -1,6 +1,7 @@
 spring:
   application:
     name: pdf-converter
+
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
@@ -20,3 +21,36 @@ spring:
         value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicNameStrategy
         request.timeout.ms: 5000
         max.block.ms: 10000
+
+  cloud:
+    vault:
+      enabled: true
+      uri: http://localhost:8200
+      token: dev-root-token
+      kv:
+        enabled: true
+        backend: secret
+        application-name: pdf-converter
+#        default-context: myapp
+
+  config:
+    import: vault://
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 60000ms
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 600000  # 10 minutes in milliseconds
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.cloud.vault: DEBUG
+    com.example: DEBUG

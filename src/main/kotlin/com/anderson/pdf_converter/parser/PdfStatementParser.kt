@@ -1,7 +1,8 @@
 package com.anderson.pdf_converter.parser
 
+import com.anderson.pdf_converter.domain.model.Transaction
 import java.io.InputStream
-import com.anderson.pdf_converter.model.Transaction
+
 
 interface PdfStatementParser {
     fun canParse(text: String): Boolean

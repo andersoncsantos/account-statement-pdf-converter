@@ -1,4 +1,4 @@
-package com.anderson.pdf_converter.model
+package com.anderson.pdf_converter.domain.model
 
 data class Transaction(
     val date: String,
@@ -6,4 +6,3 @@ data class Transaction(
     val amount: String,
     val balance: String? = null
 )
-

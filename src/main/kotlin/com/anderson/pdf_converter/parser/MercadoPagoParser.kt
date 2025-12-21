@@ -1,6 +1,7 @@
 package com.anderson.pdf_converter.parser
 
-import com.anderson.pdf_converter.model.Transaction
+
+import com.anderson.pdf_converter.domain.model.Transaction
 import com.anderson.pdf_converter.util.MonetaryValueConverter
 import com.anderson.pdf_converter.util.PdfTextExtractor
 import java.io.InputStream

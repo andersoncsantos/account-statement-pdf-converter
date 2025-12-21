@@ -1,8 +1,8 @@
 package com.anderson.pdf_converter.controller
 
+import com.anderson.pdf_converter.service.ParserDetectorService
 import com.anderson.pdf_converter.formatter.CsvFormatter
 import com.anderson.pdf_converter.parser.PdfStatementParser
-import com.anderson.pdf_converter.service.ParserDetectorService
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus

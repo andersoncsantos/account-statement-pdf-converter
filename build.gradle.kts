@@ -1,7 +1,7 @@
 plugins {
 	kotlin("jvm") version "1.9.25"
 	kotlin("plugin.spring") version "1.9.25"
-	id("org.springframework.boot") version "3.5.7"
+	id("org.springframework.boot") version "3.3.7"
 	id("io.spring.dependency-management") version "1.1.7"
 	id("com.github.davidmc24.gradle.plugin.avro") version "1.9.1"
 }
@@ -24,7 +24,13 @@ repositories {
 }
 
 dependencies {
+	// Spring Boot Starters
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation ("org.springframework.boot:spring-boot-starter-data-redis")
+	implementation ("org.springframework.boot:spring-boot-starter-cache")
+	implementation ("io.lettuce:lettuce-core:6.3.2.RELEASE")
+	implementation ("org.jetbrains.kotlin:kotlin-stdlib")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.apache.pdfbox:pdfbox:2.0.29")
@@ -32,6 +38,14 @@ dependencies {
 	implementation("io.confluent:kafka-avro-serializer:7.5.0")
 	implementation("org.apache.avro:avro:1.11.3")
 
+	// Spring Cloud Vault
+	implementation("org.springframework.cloud:spring-cloud-starter-vault-config")
+
+	// Kotlin Support
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+	// Test Dependencies
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
@@ -43,6 +57,13 @@ dependencies {
 	testImplementation("org.testcontainers:kafka:1.20.4")
 	testImplementation("org.testcontainers:junit-jupiter:1.20.4")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+// ADD THIS - Spring Cloud BOM for version management
+dependencyManagement {
+	imports {
+		mavenBom("org.springframework.cloud:spring-cloud-dependencies:2023.0.3")
+	}
 }
 
 kotlin {

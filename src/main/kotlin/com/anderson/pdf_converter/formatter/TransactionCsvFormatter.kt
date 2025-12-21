@@ -1,6 +1,6 @@
 package com.anderson.pdf_converter.formatter
 
-import com.anderson.pdf_converter.model.Transaction
+import com.anderson.pdf_converter.domain.model.Transaction
 import com.anderson.pdf_converter.util.CsvEscapeUtil
 import org.springframework.stereotype.Component
 

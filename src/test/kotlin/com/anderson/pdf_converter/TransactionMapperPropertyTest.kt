@@ -1,7 +1,7 @@
 package com.anderson.pdf_converter
 
+import com.anderson.pdf_converter.domain.model.Transaction
 import com.anderson.pdf_converter.mapper.TransactionMapper
-import com.anderson.pdf_converter.model.Transaction
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb

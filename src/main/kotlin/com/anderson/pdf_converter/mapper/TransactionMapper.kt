@@ -1,7 +1,7 @@
 package com.anderson.pdf_converter.mapper
 
 import com.anderson.pdf_converter.avro.TransactionAvro
-import com.anderson.pdf_converter.model.Transaction
+import com.anderson.pdf_converter.domain.model.Transaction
 
 /**
  * Mapper object for converting between domain Transaction model and Avro TransactionAvro model.

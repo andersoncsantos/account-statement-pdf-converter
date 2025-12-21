@@ -1,9 +1,10 @@
 package com.anderson.pdf_converter
 
+import com.anderson.pdf_converter.domain.model.Transaction
 import com.anderson.pdf_converter.mapper.TransactionMapper
-import com.anderson.pdf_converter.model.Transaction
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
 
 class TransactionMapperTest {
 
