@@ -1,4 +1,4 @@
-package com.anderson.pdfconverter.configuration
+package com.anderson.pdfconverter.infrastructure.configuration
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component

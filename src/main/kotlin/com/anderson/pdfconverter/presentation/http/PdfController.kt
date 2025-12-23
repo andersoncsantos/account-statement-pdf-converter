@@ -1,4 +1,4 @@
-package com.anderson.pdfconverter.adapters.http
+package com.anderson.pdfconverter.presentation.http
 
 import com.anderson.pdfconverter.domain.ports.`in`.CsvFormatter
 import com.anderson.pdfconverter.application.service.parser.PdfStatementParser

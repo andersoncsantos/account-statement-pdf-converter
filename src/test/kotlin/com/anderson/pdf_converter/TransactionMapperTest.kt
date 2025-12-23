@@ -1,7 +1,7 @@
 package com.anderson.pdf_converter
 
 import com.anderson.pdfconverter.domain.model.Transaction
-import com.anderson.pdfconverter.adapters.avro.TransactionMapper
+import com.anderson.pdfconverter.infrastructure.avro.TransactionMapper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test

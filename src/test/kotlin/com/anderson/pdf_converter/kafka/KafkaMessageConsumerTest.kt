@@ -4,7 +4,7 @@ import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.read.ListAppender
 import com.anderson.pdf_converter.avro.TransactionAvro
-import com.anderson.pdfconverter.adapters.kafka.KafkaMessageConsumer
+import com.anderson.pdfconverter.infrastructure.kafka.KafkaMessageConsumer
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.spyk

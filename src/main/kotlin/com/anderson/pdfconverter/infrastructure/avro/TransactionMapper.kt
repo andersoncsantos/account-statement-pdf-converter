@@ -1,4 +1,4 @@
-package com.anderson.pdfconverter.adapters.avro
+package com.anderson.pdfconverter.infrastructure.avro
 
 import com.anderson.pdf_converter.avro.TransactionAvro
 import com.anderson.pdfconverter.domain.model.Transaction
