@@ -1,7 +1,7 @@
 package com.anderson.pdf_converter
 
-import com.anderson.pdf_converter.parser.MercadoPagoParser
-import com.anderson.pdf_converter.parser.ItauParser
+import com.anderson.pdfconverter.application.service.parser.MercadoPagoParser
+import com.anderson.pdfconverter.application.service.parser.ItauParser
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPage
 import org.apache.pdfbox.pdmodel.PDPageContentStream

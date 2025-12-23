@@ -2,11 +2,11 @@ package com.anderson.pdf_converter
 
 import java.io.File
 import java.io.FileInputStream
-import com.anderson.pdf_converter.service.PdfStatementService
-import com.anderson.pdf_converter.service.ParserDetectorService
-import com.anderson.pdf_converter.parser.MercadoPagoParser
-import com.anderson.pdf_converter.parser.ItauParser
-import com.anderson.pdf_converter.formatter.TransactionCsvFormatter
+import com.anderson.pdfconverter.application.service.PdfStatementService
+import com.anderson.pdfconverter.application.service.ParserDetectorService
+import com.anderson.pdfconverter.application.service.parser.MercadoPagoParser
+import com.anderson.pdfconverter.application.service.parser.ItauParser
+import com.anderson.pdfconverter.application.service.TransactionCsvFormatter
 import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
