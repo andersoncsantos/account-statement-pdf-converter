@@ -1,4 +1,4 @@
-package com.anderson.pdfconverter.adapters.kafka
+package com.anderson.pdfconverter.infrastructure.kafka
 
 import com.anderson.pdf_converter.avro.TransactionAvro
 import org.apache.kafka.common.errors.SerializationException

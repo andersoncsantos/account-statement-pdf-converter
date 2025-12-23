@@ -1,7 +1,7 @@
 package com.anderson.pdf_converter.kafka
 
 import com.anderson.pdf_converter.avro.TransactionAvro
-import com.anderson.pdfconverter.adapters.kafka.KafkaMessageProducer
+import com.anderson.pdfconverter.infrastructure.kafka.KafkaMessageProducer
 import io.mockk.*
 import org.apache.kafka.common.errors.SerializationException
 import org.junit.jupiter.api.AfterEach
